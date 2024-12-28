@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .chat-log {
+            min-height: 600px;
+            background: #f9f9f9;
+            padding: 10px;
+            flex: 1;
+            font-size: 14px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .chat-log ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-log li {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            max-width: 75%;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        /* Styling for sent messages */
+        .sent-message {
+            background: #dcf8c6;
+            margin-left: auto;
+            border-radius: 15px;
+            border: 1px solid #c3e6cb;
+            padding: 10px 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: right;
+        }
+
+        /* Styling for received messages */
+        .received-message {
+            background: #ffffff;
+            border-radius: 15px;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+            background: #ffffff;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .chat-submit {
+            background: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-submit:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-log" class="chat-log">
+            <ul>
+                {% for message in messages %}
+                    {% if message.user.username == user.username %}
+                        <li class="sent-message">
+                            <span>{{ message.content }}</span>
+                        </li>
+                    {% else %}
+                        <li class="received-message">
+                            <span>{{ message.content }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="chat-input-container">
+            <input id="chat-message-input" class="chat-input" type="text" placeholder="Type your message here...">
+            <button id="chat-message-submit" class="chat-submit">Send</button>
+        </div>
+    </div>
+
+    {{ room_name|json_script:"room-name" }}
+
+    <script>
+        // Request permission for notifications
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+
+        // Check if the page is visible or not (whether user is in the same tab)
+        let isPageVisible = document.visibilityState === "visible";
+
+        document.addEventListener("visibilitychange", function() {
+            isPageVisible = document.visibilityState === "visible";
+        });
+
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const chatSocket = new WebSocket(
+            protocol + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const chatLog = document.querySelector('#chat-log ul');
+            const newMessage = document.createElement('li');
+            newMessage.classList.add(data.username === "{{ user.username }}" ? 'sent-message' : 'received-message');
+            newMessage.innerHTML = `<span>${data.message}</span>`;
+            chatLog.appendChild(newMessage);
+
+            // Scroll to the bottom
+            document.querySelector('#chat-log').scrollTop = document.querySelector('#chat-log').scrollHeight;
+
+            // Show notification for received messages if the page is not visible and if the message is not sent by the current user
+            if (!isPageVisible && data.username !== "{{ user.username }}" && Notification.permission === "granted") {
+                const notification = new Notification("New message", {
+                    body: data.message,
+                    icon: '/path/to/your/icon.png' // Optional: You can add an icon for the notification
+                });
+            }
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.key === 'Enter') {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            if (message.trim() === "") return; // Prevent sending empty messages
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html>
