@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .chat-log {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        .chat-log ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-log li {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 12px;
+            max-width: 75%;
+            word-wrap: break-word;
+        }
+
+        .sent-message {
+            background: #dcf8c6;
+            margin-left: auto;
+        }
+
+        .received-message {
+            background: #ffffff;
+        }
+
+        .chat-log img, .chat-log video {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+            background: #ffffff;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        .chat-submit, .chat-attach {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-log" class="chat-log">
+            <ul>
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>تابالبي</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>hhhhhhhhhhhhhhh</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>ssss</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>ghfjhgfjhgfj</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>ghfjhgfjhgfj</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>gdsfgdsfg</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>dfgsssssssssss</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>ggggggggggggggggg</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>لابتلابت</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>ddddddddddddddd</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>ffffffffffffffff</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>asfddsa</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>ttttttttttttttttt</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>ttttttttttttttttttttt</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>يسبششيسبسش</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>يسشبيسشبشيسب</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>يسشبيسشبسشيبيسش</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>ghfdhgfdh</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>dsfsadf</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>dasfadsf</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>adsfasd</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>uu</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="received-message">
+                            
+                                <span>iii</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>gfdhgfh</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>سشبييسشب</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>سشيبيسب</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>fdgsfdsg</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>gfdhgfdh</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <span>لباااااااااا</span>
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <img src="/media/chat_media/messages.png" alt="Image">
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <img src="/media/chat_media/image__1_-removebg-preview.png" alt="Image">
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <img src="/media/chat_media/tables.aspx" alt="Image">
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <img src="/media/chat_media/image-removebg-preview.png" alt="Image">
+                            
+                        </li>
+                    
+                
+                    
+                        <li class="sent-message">
+                            
+                                <img src="/media/chat_media/10-08-2024-%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA_%D8%A7%D9%84%D8%B7%D9%84%D8%A7%D8%A8.xlsx" alt="Image">
+                            
+                        </li>
+                    
+                
+            </ul>
+        </div>
+
+        <div class="chat-input-container">
+            <input id="chat-message-input" class="chat-input" type="text" placeholder="Type a message...">
+            <input id="chat-file-input" type="file" style="display: none;">
+            <button id="chat-file-button" class="chat-attach">Attach</button>
+            <button id="chat-message-submit" class="chat-submit">Send</button>
+        </div>
+    </div>
+
+    <script id="room-name" type="application/json">"aa"</script>
+
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const chatSocket = new WebSocket(
+            protocol + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const chatLog = document.querySelector('#chat-log ul');
+            const newMessage = document.createElement('li');
+            newMessage.className = data.username === "nazar" ? 'sent-message' : 'received-message';
+
+            if (data.media) {
+                if (data.media.endsWith('.jpg') || data.media.endsWith('.png') || data.media.endsWith('.jpeg') || data.media.endsWith('.gif')) {
+                    newMessage.innerHTML = `<img src="${data.media}" alt="Image">`;
+                } else if (data.media.endsWith('.mp4') || data.media.endsWith('.webm') || data.media.endsWith('.ogg')) {
+                    newMessage.innerHTML = `<video controls><source src="${data.media}"></video>`;
+                } else {
+                    newMessage.innerHTML = `<a href="${data.media}" download>Download File</a>`;
+                }
+            } else {
+                newMessage.innerHTML = `<span>${data.message}</span>`;
+            }
+
+            chatLog.appendChild(newMessage);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function() {
+            const messageInput = document.querySelector('#chat-message-input');
+            const message = messageInput.value;
+
+            if (message.trim()) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInput.value = '';
+            }
+        };
+
+        document.querySelector('#chat-file-button').onclick = function() {
+            document.querySelector('#chat-file-input').click();
+        };
+
+        document.querySelector('#chat-file-input').onchange = function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const base64Data = event.target.result;
+                chatSocket.send(JSON.stringify({
+                    'media': base64Data,
+                    'media_name': file.name
+                }));
+            };
+
+            reader.readAsDataURL(file);
+        };
+    </script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+import time
+from datetime import datetime
 from .models import *
 
 def login_view(request):
@@ -30,7 +32,11 @@ def room_view(request, room_name):
     messages = Message.objects.filter(room=room).order_by('timestamp')
     # تعديل تنسيق الوقت إلى AM/PM
     for message in messages:
-        message.formatted_time = message.timestamp.strftime('%I:%M %p')
+        if message.media:
+            print(message.media)
+    #     local_time = time.localtime(message.timestamp.timestamp())
+    #     message.formatted_time = time.strftime('%I:%M %p', local_time)
+    #     message.formatted_time = message.timestamp.strftime('%I:%M %p')
     return render(request, 'chat/room.html', {
         'room_name': room_name,
         'messages': messages
