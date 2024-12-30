@@ -1,9 +1,3 @@
-# def index(request):
-#     return render(request, "chat/index.html")
-# def room(request, room_name):
-#     return render(request, "chat/room.html", {"room_name": room_name})
-
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -21,19 +15,55 @@ def login_view(request):
             return render(request, 'login.html', {'error': 'Invalid credentials'})
     return render(request, 'login.html')
 
-@login_required
-def select_room_view(request):
-    rooms = Room.objects.all()
-    if request.method == 'POST':
-        room_name = request.POST['room_name']
-        return redirect('chat', room_name=room_name)
-    return render(request, 'chat/select_room.html', {'rooms': rooms})
+# @login_required
+# def select_room_view(request):
+#     rooms = Room.objects.all()
+#     if request.method == 'POST':
+#         room_name = request.POST['room_name']
+#         return redirect('chat', room_name=room_name)
+#     return render(request, 'chat/select_room.html', {'rooms': rooms})
+
 
 @login_required
 def room_view(request, room_name):
     room, created = Room.objects.get_or_create(name=room_name)
     messages = Message.objects.filter(room=room).order_by('timestamp')
+    # تعديل تنسيق الوقت إلى AM/PM
+    for message in messages:
+        message.formatted_time = message.timestamp.strftime('%I:%M %p')
     return render(request, 'chat/room.html', {
         'room_name': room_name,
         'messages': messages
     })
+
+
+@login_required
+def select_room(request):
+    # إذا تم إرسال اسم الغرفة، تحقق إذا كانت موجودة أو قم بإنشائها
+    if request.method == "POST":
+        room_name = request.POST.get("room_name")
+        if room_name:
+            room, created = Room.objects.get_or_create(name=room_name)
+            return redirect("chat", room_name=room.name)
+    
+    # اجلب جميع الغرف والمستخدمين
+    rooms = Room.objects.exclude(name__startswith="private")
+    users = CustomUser.objects.all()  # أو User.objects.all() إذا كنت تستخدم نموذج المستخدم الافتراضي
+    
+    return render(request, "chat/select_room.html", {"rooms": rooms, "users": users})
+    
+
+@login_required
+def private_chat(request, username):
+    # تحقق من وجود المستخدم
+    other_user = CustomUser.objects.filter(username=username).first()
+    if not other_user:
+        return render(request, "error.html", {"error": "User not found."})
+    
+    # إنشاء اسم غرفة فريد للمحادثة بين المستخدمين
+    room_name = f"private_{min(request.user.username, other_user.username)}_{max(request.user.username, other_user.username)}"
+    
+    # قم بإنشاء الغرفة إذا لم تكن موجودة
+    room, created = Room.objects.get_or_create(name=room_name)
+    
+    return redirect("chat", room_name=room.name)
